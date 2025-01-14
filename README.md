@@ -25,5 +25,5 @@ To get a copy of this repository on your local machine:
 1. Open your terminal.
 2. Run the following command:
    ```bash
-   git clone https://github.com/<your-username>/ICS415-Lectures.git
+   git clone https://github.com/aamhaamm/ICS415-Lectures.git
    ```
