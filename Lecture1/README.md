@@ -29,9 +29,15 @@ The goal is to:
    cd ICS415-Lectures/Lecture1
    ```
 2. Compile the Java files:
+
+   ```bash
    javac Vector.java Sphere.java Ray.java RayTracer.java
+   ```
 
 3. Run the program:
+
+   ```bash
    java RayTracer
+   ```
 
 4. The rendered output will be saved as Lecture1.png in the same folder.
