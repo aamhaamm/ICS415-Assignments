@@ -26,7 +26,7 @@ The goal is to:
 
 1. Navigate to the `Lecture1` folder:
    ```bash
-   cd ICS415-Lectures/Lecture1
+   cd ICS415-Assignments/Lecture1
    ```
 2. Compile the Java files:
 
