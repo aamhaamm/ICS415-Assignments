@@ -1,3 +1,5 @@
+package lecture1;
+
 /**
  * Represents a ray in 3D space with an origin and a direction.
  */

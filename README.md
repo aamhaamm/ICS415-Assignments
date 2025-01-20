@@ -10,13 +10,13 @@ This repository contains the source code and explanations for ICS415 lecture tas
 ## Repository Structure
 
 - **Lecture1/**: Contains the implementation of the ray tracing task explained in Lecture 1.
-- **Lecture2/**:
+- **Lecture2/**: Contains the implementation of the shading and lighting task for Lecture 2.
 - **Lecture3/**:
 
 Each lecture folder includes:
 
 - The source code files.
-- A lecture-specific README.md explaining the task and how to run the code.
+- A lecture-specific README.md explaining the task
 
 ## How to Clone the Repository
 
@@ -27,3 +27,33 @@ To get a copy of this repository on your local machine:
    ```bash
    git clone https://github.com/aamhaamm/ICS415-Assignments.git
    ```
+
+## How to Compile and Run the Code
+
+1. Navigate to the root folder of the project:
+
+```bash
+  cd ICS415-Assignments
+```
+
+2. Compile all lecture files:
+
+```bash
+   javac lecture1/*.java lecture2/*.java
+```
+
+3. Run the specific lecture:
+
+Lecture 1:
+
+```bash
+   java lecture1.RayTracer
+```
+
+Lecture 2:
+
+```bash
+   java lecture2.Light
+```
+
+4. The output images will be saved as Lecture1.png and Lecture2.png in the root directory.

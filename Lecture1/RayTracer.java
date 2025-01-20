@@ -1,3 +1,5 @@
+package lecture1;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;

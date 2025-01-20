@@ -1,3 +1,5 @@
+package lecture1;
+
 /**
  * Represents a 3D vector and provides basic vector operations.
  */

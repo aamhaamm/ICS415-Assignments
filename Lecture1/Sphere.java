@@ -1,3 +1,5 @@
+package lecture1;
+
 /**
  * Represents a sphere in 3D space with a center, radius, and color.
  */
