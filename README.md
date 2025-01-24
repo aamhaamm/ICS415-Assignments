@@ -11,7 +11,7 @@ This repository contains the source code and explanations for ICS415 lecture tas
 
 - **Lecture1/**: Contains the implementation of the ray tracing task explained in Lecture 1.
 - **Lecture2/**: Contains the implementation of the shading and lighting task for Lecture 2.
-- **Lecture3/**:
+- **Lecture3/**: Contains the implementation of the shadows and reflections task for Lecture 3.
 
 Each lecture folder includes:
 
@@ -39,7 +39,7 @@ To get a copy of this repository on your local machine:
 2. Compile all lecture files:
 
 ```bash
-   javac lecture1/*.java lecture2/*.java
+   javac lecture1/*.java lecture2/*.java lecture3/*.java
 ```
 
 3. Run the specific lecture:
@@ -56,4 +56,10 @@ Lecture 2:
    java lecture2.Light
 ```
 
-4. The output images will be saved as Lecture1.png and Lecture2.png in the root directory.
+Lecture 3:
+
+```bash
+   java lecture3.ShadowsAndReflections
+```
+
+4. The output image will be saved with the corresponding lecture number in the root directory (e.g., `Lecture1.png` for Lecture 1, `Lecture2.png` for Lecture 2, and so on).
