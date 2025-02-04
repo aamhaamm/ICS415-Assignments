@@ -39,7 +39,7 @@ To get a copy of this repository on your local machine:
 2. Compile all lecture files:
 
 ```bash
-   javac lecture1/*.java lecture2/*.java lecture3/*.java lecture4/*.java
+   javac lecture1/*.java lecture2/*.java lecture3/*.java lecture4/*.java lecture5/*.java project1/*.java
 ```
 
 3. Run the specific lecture:
@@ -66,6 +66,18 @@ Lecture 4:
 
 ```bash
    java lecture4.BunnyRenderer
+```
+
+Lecture 5:
+
+```bash
+   java lecture5.RayTracerL5
+```
+
+Project 1:
+
+```bash
+   java project1.RayTracerP1
 ```
 
 4. The output image will be saved with the corresponding lecture number in the root directory (e.g., `Lecture1.png` for Lecture 1, `Lecture2.png` for Lecture 2, and so on).
