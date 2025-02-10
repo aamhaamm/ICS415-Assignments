@@ -77,7 +77,7 @@ Lecture 5:
 Project 1:
 
 ```bash
-   java project1.RayTracerP1
+   java project1.Main
 ```
 
 4. The output image will be saved with the corresponding lecture number in the root directory (e.g., `Lecture1.png` for Lecture 1, `Lecture2.png` for Lecture 2, and so on).
