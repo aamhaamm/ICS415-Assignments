@@ -10,12 +10,12 @@ This repository contains the source code and explanations for ICS415 lecture tas
 ## Repository Structure
 
 - [Lecture1/](Lecture1/) – Contains the implementation of the ray tracing task explained in Lecture 1.
-- [Lecture2/](Lecture2/) – Contains the implementation of the shading and lighting task for Lecture 2.
-- [Lecture3/](Lecture3/) – Contains the implementation of the shadows and reflections task for Lecture 3.
-- [Lecture4/](Lecture4/) – Contains the implementation of the Stanford Bunny rendering task for Lecture 4.
-- [Lecture5/](Lecture5/) – Contains the implementation of the ray traced scene with Cylinder, Sphere, and Stanford Bunny for Lecture 5.
-- [Project1/](Project1/) – Contains the implementation for Project 1.
-- [Project2/](project2/) – Contains the Unity project demonstrating the Shadertoy Cable Shader.
+- [lecture2/](lecture2/) – Contains the implementation of the shading and lighting task for Lecture 2.
+- [lecture3/](lecture3/) – Contains the implementation of the shadows and reflections task for Lecture 3.
+- [lecture4/](lecture4/) – Contains the implementation of the Stanford Bunny rendering task for Lecture 4.
+- [lecture5/](lecture5/) – Contains the implementation of the ray traced scene with Cylinder, Sphere, and Stanford Bunny for Lecture 5.
+- [project1/](project1/) – Contains the implementation a Ray Tracer.
+- [project2/](project2/) – Contains the Unity project demonstrating the Shadertoy Cable Shader.
 
 Each lecture folder includes:
 
