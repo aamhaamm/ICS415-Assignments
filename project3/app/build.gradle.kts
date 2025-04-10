@@ -26,23 +26,27 @@ dependencies {
     implementation("org.lwjgl:lwjgl")
     implementation("org.lwjgl:lwjgl-glfw")
     implementation("org.lwjgl:lwjgl-opengl")
+    // Add LWJGL STB for image loading:
+    implementation("org.lwjgl:lwjgl-stb")
     
     // Runtime native libraries for Apple Silicon on macOS.
     runtimeOnly("org.lwjgl:lwjgl::natives-macos-arm64")
     runtimeOnly("org.lwjgl:lwjgl-glfw::natives-macos-arm64")
     runtimeOnly("org.lwjgl:lwjgl-opengl::natives-macos-arm64")
+    // Add native libraries for STB on macOS ARM64:
+    runtimeOnly("org.lwjgl:lwjgl-stb::natives-macos-arm64")
 }
 
 java {
     // Define the Java toolchain version (here set to Java 21).
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
 application {
     // Specify the fully qualified name of your main class.
-    mainClass = "org.example.App"
+    mainClass.set("org.example.App")
     // This is the crucial change for macOS.
     applicationDefaultJvmArgs = listOf("-XstartOnFirstThread")
 }
