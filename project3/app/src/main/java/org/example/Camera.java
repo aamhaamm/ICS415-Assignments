@@ -1,5 +1,8 @@
 package org.example;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+
 public class Camera {
     public float posX, posY, posZ;
     public float pitch, yaw;
@@ -17,7 +20,6 @@ public class Camera {
         this.yaw = yaw;
     }
 
-    // Calculate forward vector based on pitch and yaw.
     public float[] getForwardVector() {
         float cosPitch = (float) Math.cos(Math.toRadians(pitch));
         float sinPitch = (float) Math.sin(Math.toRadians(pitch));
@@ -30,7 +32,19 @@ public class Camera {
         };
     }
 
-    // Update camera angles based on mouse movement.
+    // Returns a view matrix using JOML's lookAt.
+    public Matrix4f getViewMatrix() {
+        Vector3f eye = new Vector3f(posX, posY, posZ);
+        float[] forward = getForwardVector();
+        Vector3f center = new Vector3f(
+            posX + forward[0],
+            posY + forward[1],
+            posZ + forward[2]
+        );
+        Vector3f up = new Vector3f(0, 1, 0);
+        return new Matrix4f().lookAt(eye, center, up);
+    }
+    
     public void handleMouseMovement(double xpos, double ypos) {
         if (firstMouse) {
             lastMouseX = xpos;

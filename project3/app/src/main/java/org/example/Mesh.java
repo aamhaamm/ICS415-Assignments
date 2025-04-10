@@ -16,11 +16,11 @@ public class Mesh {
         vaoId = GL30.glGenVertexArrays();
         GL30.glBindVertexArray(vaoId);
 
-        // Vertex buffer
+        // Create vertex buffer.
         vboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
-        int stride = 8 * Float.BYTES; // 3 pos, 2 tex coords, 3 normals = 8 floats per vertex
+        int stride = 8 * Float.BYTES; // 3 position, 2 texture, 3 normals
         GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, stride, 0);
         GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, stride, 3 * Float.BYTES);
         GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, stride, 5 * Float.BYTES);
@@ -28,12 +28,11 @@ public class Mesh {
         GL20.glEnableVertexAttribArray(1);
         GL20.glEnableVertexAttribArray(2);
 
-        // Index buffer
+        // Create index buffer.
         idxVboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, idxVboId);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, GL15.GL_STATIC_DRAW);
 
-        // Unbind
         GL30.glBindVertexArray(0);
     }
 

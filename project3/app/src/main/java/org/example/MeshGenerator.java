@@ -15,12 +15,13 @@ public class MeshGenerator {
                     BlockType block = chunk.getBlock(x, y, z);
                     if (block == BlockType.AIR) continue;
                     
-                    // Check the front face (positive z). Generate if neighbor is AIR.
+                    // Check front face (positive z)
                     if (chunk.getBlock(x, y, z + 1) == BlockType.AIR) {
-                        addVertex(vertices, x, y, z + 1, 0, 0,  0, 0, 1);
-                        addVertex(vertices, x + 1, y, z + 1, 1, 0,  0, 0, 1);
-                        addVertex(vertices, x + 1, y + 1, z + 1, 1, 1,  0, 0, 1);
-                        addVertex(vertices, x, y + 1, z + 1, 0, 1,  0, 0, 1);
+                        // 4 vertices: position, u,v, normal (0,0,1)
+                        addVertex(vertices, x, y, z + 1, 0, 0, 0, 0, 1);
+                        addVertex(vertices, x + 1, y, z + 1, 1, 0, 0, 0, 1);
+                        addVertex(vertices, x + 1, y + 1, z + 1, 1, 1, 0, 0, 1);
+                        addVertex(vertices, x, y + 1, z + 1, 0, 1, 0, 0, 1);
                         
                         indices.add(indexOffset);
                         indices.add(indexOffset + 1);
@@ -30,7 +31,7 @@ public class MeshGenerator {
                         indices.add(indexOffset);
                         indexOffset += 4;
                     }
-                    // TODO: Generate other faces (back, left, right, top, bottom) similarly.
+                    // TODO: Add faces for back, left, right, top, and bottom.
                 }
             }
         }

@@ -8,7 +8,7 @@ public class Chunk {
     private BlockType[][][] blocks = new BlockType[WIDTH][HEIGHT][DEPTH];
 
     public Chunk() {
-        // Simple terrain: stone in bottom half, air above.
+        // Simple terrain: stone in the bottom half, air above.
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 for (int z = 0; z < DEPTH; z++) {
