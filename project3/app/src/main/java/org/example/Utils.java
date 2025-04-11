@@ -33,7 +33,7 @@ public class Utils {
         ByteBuffer buffer = ByteBuffer.allocateDirect((int) Files.size(path) + 1);
         try (SeekableByteChannel channel = Files.newByteChannel(path)) {
             while (channel.read(buffer) != -1) {
-                // Keep reading until EOF.
+                // Continue until end of file.
             }
         }
         buffer.flip();

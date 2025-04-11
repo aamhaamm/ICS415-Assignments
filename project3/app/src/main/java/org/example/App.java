@@ -19,6 +19,9 @@ public class App {
     private Texture texture;
     private Chunk chunk;
     private Mesh chunkMesh;
+    
+    // New field to track left mouse click state.
+    private boolean leftMousePressed = false;
 
     public static void main(String[] args) {
         new App().run();
@@ -36,15 +39,16 @@ public class App {
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
+    
     private void init() {
-        // Set error callback
+        // Set error callback.
         GLFWErrorCallback.createPrint(System.err).set();
     
         if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         
-        // Set window hints for an OpenGL 3.3 core profile context (required for GLSL 330)
+        // Set window hints for an OpenGL 3.3 Core context.
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -58,78 +62,83 @@ public class App {
             throw new RuntimeException("Failed to create the GLFW window");
         }
         
-        // Set up callbacks (key callback, mouse callback, etc.)
+        // Set key callback to close window when ESC is pressed.
         glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
                 glfwSetWindowShouldClose(win, true);
             }
         });
         
+        // Set up mouse callback for camera control.
         glfwSetCursorPosCallback(window, (win, xpos, ypos) -> {
             camera.handleMouseMovement(xpos, ypos);
         });
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(1); // Enable v-sync
+        glfwSwapInterval(1); // Enable V-Sync
         glfwShowWindow(window);
     
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
     
-        // Initialize your camera, shader, texture, chunk, etc.
-        camera = new Camera(0, 1.6f, 3, 0, -90);
+        // Initialize the camera.  
+        // Position the camera so it can see the whole chunk. Adjust as needed.
+        camera = new Camera(8, 20, -20, -30, 0);
         lastTime = glfwGetTime();
+    
+        // Load shader program.
         shader = new ShaderProgram("shaders/vertex.glsl", "shaders/fragment.glsl");
+    
+        // Load texture atlas.
         texture = new Texture("textures/texture_atlas.png");
+    
+        // Create a chunk with random terrain.
         chunk = new Chunk();
         chunkMesh = MeshGenerator.generateMesh(chunk);
     }
     
-
     private void loop() {
-        // Create a projection matrix (perspective)
-        Matrix4f projection = new Matrix4f().perspective((float) Math.toRadians(70), 800f/600f, 0.1f, 100f);
+        // Create a perspective projection matrix.
+        Matrix4f projection = new Matrix4f().perspective((float) Math.toRadians(70), 800f / 600f, 0.1f, 100f);
 
         while (!glfwWindowShouldClose(window)) {
             double currentTime = glfwGetTime();
             float deltaTime = (float) (currentTime - lastTime);
             lastTime = currentTime;
-
+    
             processInput(deltaTime);
-
+    
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Prepare view matrix from camera.
+    
+            // Prepare view and model matrices.
             Matrix4f view = camera.getViewMatrix();
-
-            // Model matrix: identity for now.
             Matrix4f model = new Matrix4f().identity();
-
+    
             shader.bind();
-            // Set matrices as uniforms.
             shader.setUniform("projection", projection);
             shader.setUniform("view", view);
             shader.setUniform("model", model);
-            // Set up lighting uniforms.
             shader.setUniform("lightPos", new Vector3f(10, 10, 10));
             shader.setUniform("viewPos", new Vector3f(camera.posX, camera.posY, camera.posZ));
             shader.setUniform("lightColor", new Vector3f(1, 1, 1));
             shader.setUniform("objectColor", new Vector3f(1, 1, 1));
-            // Bind texture to texture unit 0.
+            
+            // Bind texture and set uniform.
             texture.bind();
             shader.setUniform("textureSampler", 0);
-            
+    
             // Render the chunk mesh.
             chunkMesh.render();
             shader.unbind();
-
+    
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
     }
-
+    
     private void processInput(float deltaTime) {
+        // WASD movement.
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             float[] forward = camera.getForwardVector();
             camera.posX += forward[0] * camera.movementSpeed * deltaTime;
@@ -155,6 +164,46 @@ public class App {
             float rightZ = -forward[0];
             camera.posX += rightX * camera.movementSpeed * deltaTime;
             camera.posZ += rightZ * camera.movementSpeed * deltaTime;
+        }
+        
+        // Check for left mouse button for destroying a block.
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            if (!leftMousePressed) {
+                leftMousePressed = true;
+                raycastAndDestroyBlock();
+            }
+        } else {
+            leftMousePressed = false;
+        }
+    }
+    
+    // Raycasts from the camera and destroys the first block hit.
+    private void raycastAndDestroyBlock() {
+        float maxDistance = 10f; // Maximum distance to look
+        float step = 0.1f;       // Step size along the ray
+        
+        float[] forward = camera.getForwardVector();
+        float originX = camera.posX;
+        float originY = camera.posY;
+        float originZ = camera.posZ;
+        
+        for (float t = 0; t < maxDistance; t += step) {
+            float x = originX + forward[0] * t;
+            float y = originY + forward[1] * t;
+            float z = originZ + forward[2] * t;
+            int blockX = (int)Math.floor(x);
+            int blockY = (int)Math.floor(y);
+            int blockZ = (int)Math.floor(z);
+            
+            BlockType block = chunk.getBlock(blockX, blockY, blockZ);
+            if (block != BlockType.AIR) {
+                // "Destroy" the block by setting it to AIR.
+                chunk.destroyBlock(blockX, blockY, blockZ);
+                // Regenerate the mesh.
+                chunkMesh.cleanup();
+                chunkMesh = MeshGenerator.generateMesh(chunk);
+                break;
+            }
         }
     }
 }

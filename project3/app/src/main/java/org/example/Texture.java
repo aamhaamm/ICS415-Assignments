@@ -20,7 +20,6 @@ public class Texture {
     public Texture(String filePath) {
         ByteBuffer imageBuffer;
         try {
-            // Read the file from the classpath ("textures/texture_atlas.png")
             imageBuffer = Utils.ioResourceToByteBuffer(filePath, 8 * 1024);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load texture file " + filePath, e);
@@ -30,7 +29,6 @@ public class Texture {
             IntBuffer h = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
-            // Load image from the memory buffer
             ByteBuffer image = stbi_load_from_memory(imageBuffer, w, h, channels, 4);
             if (image == null) {
                 throw new RuntimeException("Failed to load texture file " + filePath + "\n" + stbi_failure_reason());

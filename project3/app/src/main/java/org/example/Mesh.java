@@ -20,7 +20,7 @@ public class Mesh {
         vboId = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboId);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
-        int stride = 8 * Float.BYTES; // 3 position, 2 texture, 3 normals
+        int stride = 8 * Float.BYTES; // 3 position, 2 texture, 3 normals.
         GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, stride, 0);
         GL20.glVertexAttribPointer(1, 2, GL11.GL_FLOAT, false, stride, 3 * Float.BYTES);
         GL20.glVertexAttribPointer(2, 3, GL11.GL_FLOAT, false, stride, 5 * Float.BYTES);

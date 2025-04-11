@@ -20,6 +20,7 @@ public class Camera {
         this.yaw = yaw;
     }
 
+    // Returns the forward vector based on current pitch and yaw.
     public float[] getForwardVector() {
         float cosPitch = (float) Math.cos(Math.toRadians(pitch));
         float sinPitch = (float) Math.sin(Math.toRadians(pitch));
@@ -32,7 +33,7 @@ public class Camera {
         };
     }
 
-    // Returns a view matrix using JOML's lookAt.
+    // Computes and returns the view matrix using JOML.
     public Matrix4f getViewMatrix() {
         Vector3f eye = new Vector3f(posX, posY, posZ);
         float[] forward = getForwardVector();
@@ -52,16 +53,18 @@ public class Camera {
             firstMouse = false;
         }
         double offsetX = xpos - lastMouseX;
-        double offsetY = lastMouseY - ypos; // reversed Y
+        double offsetY = lastMouseY - ypos; // reversed Y axis
         lastMouseX = xpos;
         lastMouseY = ypos;
         offsetX *= mouseSensitivity;
         offsetY *= mouseSensitivity;
         yaw += offsetX;
         pitch += offsetY;
-        if (pitch > 89.0f)
+        if (pitch > 89.0f) {
             pitch = 89.0f;
-        if (pitch < -89.0f)
+        }
+        if (pitch < -89.0f) {
             pitch = -89.0f;
+        }
     }
 }

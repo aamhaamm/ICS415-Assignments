@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL20;
 import static org.lwjgl.opengl.GL20.*;
 
 public class ShaderProgram {
@@ -25,7 +24,7 @@ public class ShaderProgram {
             throw new RuntimeException("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));
         }
         glValidateProgram(programId);
-        // Shaders can be detached and deleted after linking.
+        // Detach and delete shaders after linking.
         glDetachShader(programId, vertexShaderId);
         glDetachShader(programId, fragmentShaderId);
         glDeleteShader(vertexShaderId);
@@ -67,7 +66,6 @@ public class ShaderProgram {
     public void setUniform(String name, Matrix4f value) {
         int location = glGetUniformLocation(programId, name);
         try (var stack = org.lwjgl.system.MemoryStack.stackPush()) {
-            // 16 floats for a 4x4 matrix.
             float[] mat = new float[16];
             value.get(mat);
             glUniformMatrix4fv(location, false, mat);

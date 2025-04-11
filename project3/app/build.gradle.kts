@@ -9,13 +9,13 @@ repositories {
 val lwjglVersion = "3.3.1"
 
 dependencies {
-    // Example dependency; adjust or remove as needed.
+    // Example dependency (Guava)
     implementation("com.google.guava:guava:31.1-jre")
     
-    // Add JOML for matrix math (for 3D projections, etc.)
+    // JOML for matrix math.
     implementation("org.joml:joml:1.10.5")
 
-    // LWJGL dependencies using BOM for version consistency.
+    // LWJGL BOM and core libraries.
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
     implementation("org.lwjgl:lwjgl")
     implementation("org.lwjgl:lwjgl-glfw")
