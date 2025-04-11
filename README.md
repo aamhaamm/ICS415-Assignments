@@ -87,6 +87,6 @@ Project 1:
 
 4. The output image will be saved with the corresponding lecture number in the root directory (e.g., `Lecture1.png` for Lecture 1, `Lecture2.png` for Lecture 2, and so on).
 
-**Note:** For Project 2, please navigate to the README.md inside the project2/ folder for detailed instructions on how to open, compile, and run the Unity project.
-For project 3 is a Minecraft-like voxel engine implemented in Java using LWJGL. For detailed instructions on how to build, run, and play Project 3, please refer to the README.md located in the project3/ folder.
+**Note:** For Project 2, please navigate to the README.md inside the [project2/](project2/) folder for detailed instructions on how to open, compile, and run the Unity project.
+For project 3 is a Minecraft-like voxel engine implemented in Java using LWJGL. For detailed instructions on how to build, run, and play Project 3, please refer to the README.md located in the [project3/](project3/) folder.
 Additionally, there is a videos file in the root folder that demonstrates the running code output
