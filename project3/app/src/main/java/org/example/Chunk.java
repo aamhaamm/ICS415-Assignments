@@ -30,11 +30,16 @@ public class Chunk {
             return BlockType.AIR;
         return blocks[x][y][z];
     }
-    
-    // New method: set a block to AIR (destroy it).
+
     public void destroyBlock(int x, int y, int z) {
         if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && z >= 0 && z < DEPTH) {
             blocks[x][y][z] = BlockType.AIR;
+        }
+    }
+
+    public void placeBlock(int x, int y, int z, BlockType type) {
+        if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && z >= 0 && z < DEPTH) {
+            blocks[x][y][z] = type;
         }
     }
 }

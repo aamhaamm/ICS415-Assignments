@@ -20,8 +20,11 @@ public class App {
     private Chunk chunk;
     private Mesh chunkMesh;
     
-    // New field to track left mouse click state.
-    private boolean leftMousePressed = false;
+    // Timers and delays for continuous block actions.
+    private float destroyDelay = 0.2f; // seconds between block destruction
+    private float buildDelay = 0.2f;   // seconds between block placement
+    private float destroyTimer = 0;
+    private float buildTimer = 0;
 
     public static void main(String[] args) {
         new App().run();
@@ -31,7 +34,7 @@ public class App {
         init();
         loop();
 
-        // Cleanup
+        // Cleanup resources
         chunkMesh.cleanup();
         shader.cleanup();
         glfwFreeCallbacks(window);
@@ -48,7 +51,7 @@ public class App {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
         
-        // Set window hints for an OpenGL 3.3 Core context.
+        // Request an OpenGL 3.3 Core context.
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -62,28 +65,30 @@ public class App {
             throw new RuntimeException("Failed to create the GLFW window");
         }
         
-        // Set key callback to close window when ESC is pressed.
+        // Set key callback (ESC to exit).
         glfwSetKeyCallback(window, (win, key, scancode, action, mods) -> {
             if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
                 glfwSetWindowShouldClose(win, true);
             }
         });
         
-        // Set up mouse callback for camera control.
+        // Mouse callback for camera look.
         glfwSetCursorPosCallback(window, (win, xpos, ypos) -> {
             camera.handleMouseMovement(xpos, ypos);
         });
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
         glfwMakeContextCurrent(window);
-        glfwSwapInterval(1); // Enable V-Sync
+        glfwSwapInterval(1); // Enable V-Sync.
         glfwShowWindow(window);
     
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
     
-        // Initialize the camera.  
-        // Position the camera so it can see the whole chunk. Adjust as needed.
+        // Set a sky-blue background.
+        glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
+    
+        // Initialize camera (positioned to see the full chunk).
         camera = new Camera(8, 20, -20, -30, 0);
         lastTime = glfwGetTime();
     
@@ -100,18 +105,24 @@ public class App {
     
     private void loop() {
         // Create a perspective projection matrix.
-        Matrix4f projection = new Matrix4f().perspective((float) Math.toRadians(70), 800f / 600f, 0.1f, 100f);
+        Matrix4f projection = new Matrix4f().perspective(
+            (float) Math.toRadians(70), 800f / 600f, 0.1f, 100f
+        );
 
         while (!glfwWindowShouldClose(window)) {
             double currentTime = glfwGetTime();
             float deltaTime = (float) (currentTime - lastTime);
             lastTime = currentTime;
+            
+            // Update action timers.
+            destroyTimer -= deltaTime;
+            buildTimer -= deltaTime;
     
             processInput(deltaTime);
     
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-            // Prepare view and model matrices.
+            // Compute view and model matrices.
             Matrix4f view = camera.getViewMatrix();
             Matrix4f model = new Matrix4f().identity();
     
@@ -123,12 +134,11 @@ public class App {
             shader.setUniform("viewPos", new Vector3f(camera.posX, camera.posY, camera.posZ));
             shader.setUniform("lightColor", new Vector3f(1, 1, 1));
             shader.setUniform("objectColor", new Vector3f(1, 1, 1));
-            
-            // Bind texture and set uniform.
+    
             texture.bind();
             shader.setUniform("textureSampler", 0);
     
-            // Render the chunk mesh.
+            // Render the chunk.
             chunkMesh.render();
             shader.unbind();
     
@@ -166,44 +176,93 @@ public class App {
             camera.posZ += rightZ * camera.movementSpeed * deltaTime;
         }
         
-        // Check for left mouse button for destroying a block.
+        // Left mouse button: destroy block.
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            if (!leftMousePressed) {
-                leftMousePressed = true;
+            if (destroyTimer <= 0) {
                 raycastAndDestroyBlock();
+                destroyTimer = destroyDelay;
             }
-        } else {
-            leftMousePressed = false;
+        }
+        
+        // Right mouse button: place block.
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+            if (buildTimer <= 0) {
+                raycastAndPlaceBlock();
+                buildTimer = buildDelay;
+            }
         }
     }
     
-    // Raycasts from the camera and destroys the first block hit.
     private void raycastAndDestroyBlock() {
-        float maxDistance = 10f; // Maximum distance to look
-        float step = 0.1f;       // Step size along the ray
-        
+        float maxDistance = 10f;
+        float step = 0.1f;
         float[] forward = camera.getForwardVector();
         float originX = camera.posX;
         float originY = camera.posY;
         float originZ = camera.posZ;
-        
+    
         for (float t = 0; t < maxDistance; t += step) {
             float x = originX + forward[0] * t;
             float y = originY + forward[1] * t;
             float z = originZ + forward[2] * t;
-            int blockX = (int)Math.floor(x);
-            int blockY = (int)Math.floor(y);
-            int blockZ = (int)Math.floor(z);
-            
-            BlockType block = chunk.getBlock(blockX, blockY, blockZ);
+            int bx = (int) Math.floor(x);
+            int by = (int) Math.floor(y);
+            int bz = (int) Math.floor(z);
+    
+            BlockType block = chunk.getBlock(bx, by, bz);
             if (block != BlockType.AIR) {
-                // "Destroy" the block by setting it to AIR.
-                chunk.destroyBlock(blockX, blockY, blockZ);
-                // Regenerate the mesh.
+                chunk.destroyBlock(bx, by, bz);
                 chunkMesh.cleanup();
                 chunkMesh = MeshGenerator.generateMesh(chunk);
                 break;
             }
         }
+    }
+    
+    private void raycastAndPlaceBlock() {
+        float maxDistance = 10f;
+        float step = 0.1f;
+        float[] forward = camera.getForwardVector();
+        float originX = camera.posX;
+        float originY = camera.posY;
+        float originZ = camera.posZ;
+    
+        // Start a little in front of the camera to avoid placing at the camera's position.
+        float lastX = originX, lastY = originY, lastZ = originZ;
+        boolean hit = false;
+    
+        for (float t = 0.5f; t < maxDistance; t += step) {
+            float x = originX + forward[0] * t;
+            float y = originY + forward[1] * t;
+            float z = originZ + forward[2] * t;
+            int bx = (int) Math.floor(x);
+            int by = (int) Math.floor(y);
+            int bz = (int) Math.floor(z);
+    
+            if (chunk.getBlock(bx, by, bz) != BlockType.AIR) {
+                // Place block at the last air position.
+                int lx = (int) Math.floor(lastX);
+                int ly = (int) Math.floor(lastY);
+                int lz = (int) Math.floor(lastZ);
+                if (chunk.getBlock(lx, ly, lz) == BlockType.AIR) {
+                    chunk.placeBlock(lx, ly, lz, BlockType.SPECIAL);
+                }
+                hit = true;
+                break;
+            }
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        }
+        if (!hit) {
+            // If no block was hit, place at the farthest AIR location.
+            int lx = (int) Math.floor(lastX);
+            int ly = (int) Math.floor(lastY);
+            int lz = (int) Math.floor(lastZ);
+            chunk.placeBlock(lx, ly, lz, BlockType.SPECIAL);
+        }
+    
+        chunkMesh.cleanup();
+        chunkMesh = MeshGenerator.generateMesh(chunk);
     }
 }

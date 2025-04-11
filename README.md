@@ -16,6 +16,7 @@ This repository contains the source code and explanations for ICS415 lecture tas
 - [lecture5/](lecture5/) – Contains the implementation of the ray traced scene with Cylinder, Sphere, and Stanford Bunny for Lecture 5.
 - [project1/](project1/) – Contains the implementation a Ray Tracer.
 - [project2/](project2/) – Contains the Unity project demonstrating the Shadertoy Cable Shader.
+- [project3/](project3/) – A Minecraft-like voxel engine with features for building and destroying blocks.
 
 Each lecture folder includes:
 
@@ -86,4 +87,6 @@ Project 1:
 
 4. The output image will be saved with the corresponding lecture number in the root directory (e.g., `Lecture1.png` for Lecture 1, `Lecture2.png` for Lecture 2, and so on).
 
-**Note:** For Project 2, please navigate to the README.md inside the Project2 folder for detailed instructions on how to open, compile, and run the Unity project. Additionally, there is a video file in the root folder that demonstrates the running code output
+**Note:** For Project 2, please navigate to the README.md inside the project2/ folder for detailed instructions on how to open, compile, and run the Unity project.
+For project 3 is a Minecraft-like voxel engine implemented in Java using LWJGL. For detailed instructions on how to build, run, and play Project 3, please refer to the README.md located in the project3/ folder.
+Additionally, there is a videos file in the root folder that demonstrates the running code output
