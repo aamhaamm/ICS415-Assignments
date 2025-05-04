@@ -17,6 +17,7 @@ This repository contains the source code and explanations for ICS415 lecture tas
 - [project1/](project1/) – Contains the implementation a Ray Tracer.
 - [project2/](project2/) – Contains the Unity project demonstrating the Shadertoy Cable Shader.
 - [project3/](project3/) – A Minecraft-like voxel engine with features for building and destroying blocks.
+- [project4/](project4/) – A Java Swing-based Bézier curve editor (Project-4) with an optional poly Bézier bonus feature.
 
 Each lecture folder includes:
 
@@ -89,4 +90,5 @@ Project 1:
 
 **Note:** For Project 2, please navigate to the README.md inside the [project2/](project2/) folder for detailed instructions on how to open, compile, and run the Unity project.
 For project 3 is a Minecraft-like voxel engine implemented in Java using LWJGL. For detailed instructions on how to build, run, and play Project 3, please refer to the README.md located in the [project3/](project3/) folder.
+For Project 4, see the README.md in the [project4/](project4/) folder for detailed instructions on how to compile, run, and use the Bézier curve editor.
 Additionally, there is a videos file in the root folder that demonstrates the running code output
